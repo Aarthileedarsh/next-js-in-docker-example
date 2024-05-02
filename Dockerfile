@@ -29,10 +29,18 @@ FROM node:12.8-alpine as archive-target
 ENV NODE_ENV=production
 ENV PATH $PATH:/usr/src/app/node_modules/.bin
 
+# Set the port number as an environment variable
+ENV PORT=3000
+
 WORKDIR /usr/src/app
+
+# Expose the port
+EXPOSE $PORT
 
 # Include only the release build and production packages.
 COPY --from=build-target /usr/src/app/node_modules node_modules
 COPY --from=build-target /usr/src/app/.next .next
 
-CMD ["next", "start"]
+
+# Start the application
+CMD ["next", "start", "-p", "$PORT"]
